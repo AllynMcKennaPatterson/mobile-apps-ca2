@@ -3,23 +3,8 @@ import { Text, Button, View, StyleSheet, Pressable } from "react-native";
 
 import { fetchItems } from '../../sql';
 
-Notifications.setNotificationHandler({
-    handleNotification: async () => {
-      return {
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-        shouldShowAlert: true,
-      };
-    },
-  });
-
-  
-
 const ViewProduct = ({ navigation, route }) => {
     const [products, setProducts] = React.useState([])
-
-
-
     async function listAllDbRecords() {
         
         let result = await fetchItems()
