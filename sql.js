@@ -1,57 +1,95 @@
-import * as SQLite from 'expo-sqlite';
+import * as SQLite from 'expo-sqlite'
 
-const db = SQLite.openDatabase('mySqlDb.db');
+const db = SQLite.openDatabase('mySqlDb.db')
 
 export const init = () => {
   const promise = new Promise((resolve, reject) => {
-    db.transaction(tx => {
+    db.transaction((tx) => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL);',
         [], // An array of data that can be inserted into the sql query, not used here
         () => {
-          resolve();
+          resolve()
         },
-        (xx, err) => { // xx is the transaction id which we don't use
-          reject(err);
+        (xx, err) => {
+          // xx is the transaction id which we don't use
+          reject(err)
         }
-      );
-    });
-  });
-  return promise;
-};
+      )
+    })
+  })
+  return promise
+}
 
 export const insertItem = (newItem) => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
-          tx.executeSql(
-            `INSERT INTO items (title) VALUES (?);`,
-            [newItem.title],  // An array of data that can be inserted into the swl query
-            (xx, result) => { // xx is the transaction id which we don't use
-              resolve(result);
-            },
-            (xx, err) => {
-              reject(err);
-            }
-          );
-        });
-      });
-      return promise;
-};
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `INSERT INTO items (title) VALUES (?);`,
+        [newItem.title], // An array of data that can be inserted into the swl query
+        (xx, result) => {
+          // xx is the transaction id which we don't use
+          resolve(result)
+        },
+        (xx, err) => {
+          reject(err)
+        }
+      )
+    })
+  })
+  return promise
+}
 
 export const fetchItems = () => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
-          tx.executeSql(
-            'SELECT * FROM items', // could add WHERE etc. 
-            [],  // An array of data that can be inserted into the sql query, not used here
-            (xx, result) => {
-              resolve(result.rows._array);
-            },
-            (xx, err) => {
-              reject(err);
-            }
-          );
-        });
-      });
-      return promise;
-};
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT * FROM items', // could add WHERE etc.
+        [], // An array of data that can be inserted into the sql query, not used here
+        (xx, result) => {
+          resolve(result.rows._array)
+        },
+        (xx, err) => {
+          reject(err)
+        }
+      )
+    })
+  })
+  return promise
+}
+
+export const deleteItem = (id) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM items WHERE id = ?`,
+        [id],
+        (xx, result) => {
+          resolve(result.rows._array)
+        },
+        (xx, err) => {
+          reject(err)
+        }
+      )
+    })
+  })
+  return promise
+}
+
+export const updateItem = (updatedItem) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE items SET title = ? WHERE id = ?;`,
+        [updatedItem.title, updatedItem.id],
+        (tx, result) => {
+          resolve(result.rowsAffected) // Resolves with the number of rows affected by the update
+        },
+        (tx, err) => {
+          reject(err)
+        }
+      )
+    })
+  })
+  return promise
+}

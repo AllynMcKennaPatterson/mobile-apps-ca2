@@ -1,6 +1,8 @@
-import * as React from "react";
-import { Text, Button, View, StyleSheet, Pressable, TextInput } from "react-native";
-import { init, insertItem } from '../../sql';
+import * as React from 'react'
+import { Text, Button, View, StyleSheet, Pressable, TextInput } from 'react-native'
+import { Platform } from 'react-native'
+
+import { init, insertItem } from '../../sql'
 import * as Notifications from 'expo-notifications'
 
 Notifications.setNotificationHandler({
@@ -9,143 +11,137 @@ Notifications.setNotificationHandler({
       shouldPlaySound: false,
       shouldSetBadge: false,
       shouldShowAlert: true,
-    };
+    }
   },
-});
+})
 
 const AddProduct = ({ navigation, route }) => {
-  const [itemTitle, setTitle] = React.useState("");
+  const [itemTitle, setTitle] = React.useState('')
 
   React.useEffect(() => {
     async function configurePushNotifications() {
-      const { status } = await Notifications.getPermissionsAsync();
-      let finalStatus = status;
+      const { status } = await Notifications.getPermissionsAsync()
+      let finalStatus = status
 
       if (finalStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+        const { status } = await Notifications.requestPermissionsAsync()
+        finalStatus = status
       }
 
       if (finalStatus !== 'granted') {
-        Alert.alert(
-          'Permission required',
-          'Push notifications need the appropriate permissions.'
-        );
-        return;
+        Alert.alert('Permission required', 'Push notifications need the appropriate permissions.')
+        return
       }
 
       const pushTokenData = await Notifications.getExpoPushTokenAsync({
-        projectId: '138c96b2-b1ec-4597-97ca-4a95068f83a0',
-      });
-      console.log(pushTokenData);
+        projectId: '4adead0e-d953-45dc-9af0-2e3ec3e1f49a',
+      })
+      console.log(pushTokenData)
 
       if (Platform.OS === 'android') {
         Notifications.setNotificationChannelAsync('default', {
           name: 'default',
           importance: Notifications.AndroidImportance.DEFAULT,
-        });
+        })
       }
     }
 
-    configurePushNotifications();
-  }, []);
+    configurePushNotifications()
+  }, [])
 
   React.useEffect(() => {
-    const subscription1 = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log('NOTIFICATION RECEIVED');
-        console.log(notification);
-        const userName = notification.request.content.data.userName;
-        console.log(userName);
-      }
-    );
+    const subscription1 = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('NOTIFICATION RECEIVED')
+      console.log(notification)
+      const userName = notification.request.content.data.userName
+      console.log(userName)
+    })
 
-    const subscription2 = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        console.log('NOTIFICATION RESPONSE RECEIVED');
-        console.log(response);
-        const userName = response.notification.request.content.data.userName;
-        console.log(userName);
-      }
-    );
+    const subscription2 = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log('NOTIFICATION RESPONSE RECEIVED')
+      console.log(response)
+      const userName = response.notification.request.content.data.userName
+      console.log(userName)
+    })
 
     return () => {
-      subscription1.remove();
-      subscription2.remove();
-    };
-  }, []);
+      subscription1.remove()
+      subscription2.remove()
+    }
+  }, [])
 
   async function scheduleNotificationHandler() {
     Notifications.scheduleNotificationAsync({
       content: {
         title: 'Product Successfully Added',
-        body: "A new product has been added",
-        data: { userName: 'Allyn' },
+        body: 'A new product has been added',
+        data: { userName: 'shannon' },
       },
       trigger: {
         seconds: 1,
       },
-    });
+    })
   }
 
   function sendPushNotificationHandler() {
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         to: 'ExponentPushToken[d0Ba9IKsIdE12BKY7Sj-S8]',
-        title: 'Allyn',
-        body: 'A new product has been added'
-      })
-    });
+        title: 'Shannon',
+        body: 'A new product has been added',
+      }),
+    })
   }
 
   function handleAddProduct() {
     console.log(JSON.stringify(itemTitle))
-    scheduleNotificationHandler();
-    sendPushNotificationHandler();
+    scheduleNotificationHandler()
+    sendPushNotificationHandler()
     addToDb(itemTitle)
   }
 
   async function addToDb(title) {
-    let result = await insertItem({ title: title });
-    console.log(JSON.stringify(result));
+    let result = await insertItem({ title: title })
+    console.log(JSON.stringify(result))
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Text style={styles.inputText}>Product name:</Text>
-        <TextInput style={styles.textBox}
-          keyboardType={"default"}
+        <TextInput
+          style={styles.textBox}
+          keyboardType={'default'}
           onChangeText={(text) => setTitle(text)}
-          placeholder={"Enter Product Name"}
+          placeholder={'Enter Product Name'}
         />
       </View>
       <Pressable style={styles.button} onPress={handleAddProduct}>
         <Text style={styles.buttonText}>Add Product</Text>
       </Pressable>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 30
+    marginTop: 30,
   },
   text: {
     marginTop: 50,
     fontSize: 20,
   },
   button: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: '#6f2da8',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#db1d1d',
     borderRadius: 5,
     marginTop: 20,
     width: 180,
@@ -163,8 +159,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    width: 350,
+    flexDirection: 'column',
+    width: 300,
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
@@ -173,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginRight: 10,
-  }
-});
+  },
+})
 
-export default AddProduct;
+export default AddProduct
