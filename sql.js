@@ -6,13 +6,14 @@ export const init = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL);',
+        'CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL);',
         [], // An array of data that can be inserted into the sql query, not used here
         () => {
           resolve();
         },
         (xx, err) => { // xx is the transaction id which we don't use
           reject(err);
+          console.log(err)
         }
       );
     });
@@ -54,4 +55,22 @@ export const fetchItems = () => {
         });
       });
       return promise;
-};
+}; 
+
+export const deleteItem = (itemId) => {
+  console.log("Deleting item " + itemId + " from db")
+  const promise = new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `DELETE FROM items WHERE (id) = ${itemId}`,
+        (xx, result) => { // xx is the transaction id which we don't use
+          resolve(result);
+        },
+        (xx, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+}
