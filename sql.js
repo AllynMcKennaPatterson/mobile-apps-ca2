@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase('mySqlDb.db');
+const db = SQLite.openDatabase('mySqlDb2.db');
 
 export const init = () => {
   const promise = new Promise((resolve, reject) => {
@@ -21,22 +21,40 @@ export const init = () => {
   return promise;
 };
 
+// export const insertItem = (newItem) => {
+//     const promise = new Promise((resolve, reject) => {
+//         db.transaction(tx => {
+//           tx.executeSql(
+//             `INSERT INTO items (title) VALUES (?);`,
+//             [newItem.title],  // An array of data that can be inserted into the swl query
+//             (xx, result) => { // xx is the transaction id which we don't use
+//               resolve(result);
+//             },
+//             (xx, err) => {
+//               reject(err);
+//             }
+//           );
+//         });
+//       });
+//       return promise;
+// };
+
 export const insertItem = (newItem) => {
-    const promise = new Promise((resolve, reject) => {
-        db.transaction(tx => {
+  const promise = new Promise((resolve, reject) => {
+      db.transaction(tx => {
           tx.executeSql(
-            `INSERT INTO items (title) VALUES (?);`,
-            [newItem.title],  // An array of data that can be inserted into the swl query
-            (xx, result) => { // xx is the transaction id which we don't use
-              resolve(result);
-            },
-            (xx, err) => {
-              reject(err);
-            }
+              `INSERT INTO items (title, imageUri) VALUES (?,?);`,
+              [newItem.title, "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg"],  // An array of data that can be inserted into the SQL query
+              (xx, result) => { // xx is the transaction id which we don't use
+                  resolve(result);
+              },
+              (xx, err) => {
+                  reject(err);
+              }
           );
-        });
       });
-      return promise;
+  });
+  return promise;
 };
 
 export const fetchItems = () => {

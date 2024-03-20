@@ -12,39 +12,33 @@ import { fetchItems, deleteItem } from "../../sql";
 
 const HomeScreen = ({ navigation, route }) => {
   let text = route.params;
-  const [products, setProducts] = React.useState([
-    // {
-    //   title: "title",
-    //   id: 0,
-    //   imageUri:
-    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    // },
-    // {
-    //   title: "title",
-    //   id: 1,
-    //   imageUri:
-    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    // },
-  ]);
+  const [products, setProducts] = React.useState([]);
   const [itemCount, setItemCount] = React.useState(0);
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     console.log("UseEffect");
     setItemCount(products.length)
-    listAllDbRecords();
+    await listAllDbRecords();
   }, []);
 
   async function listAllDbRecords() {
     console.log("Get");
     let result = await fetchItems();
     setProducts(result);
-    console.log(JSON.stringify(JSON.stringify(products)));
-    console.log();
+    console.log("Product1: " + JSON.stringify(products))
+    setItemCount(result.length)
+    console.log(JSON.stringify(products));
   }
 
   async function deleteHandler(id) {
     console.log("Delete: " + id);
     let result = await deleteItem(id);
+    let result2 = await listAllDbRecords();
+    setProducts(result2);
+    
+    setItemCount(products.length)
+    
+    
     console.log(JSON.stringify(result));
   }
 
@@ -61,6 +55,12 @@ const HomeScreen = ({ navigation, route }) => {
             onPress={() => navigation.navigate("AddProduct")}
           >
             <Text style={styles.buttonText}>Add a new item</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={listAllDbRecords}
+          >
+            <Text style={styles.buttonText}>Fetch Items</Text>
           </Pressable>
           <View>
             {products.map((product) => (

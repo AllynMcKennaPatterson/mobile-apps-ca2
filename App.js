@@ -8,7 +8,21 @@ import AddProduct from './components/screens/AddProduct';
 
 const Stack = createNativeStackNavigator();
 
+import { init } from "./sql";
+
 export default function App() {
+
+  React.useEffect(() => {
+      init()
+        .then(() => {
+          console.log('Initialized database');
+        })
+        .catch(err => {
+          console.log('Initializing db failed.');
+          console.log(err);
+        });
+  })
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
