@@ -15,6 +15,10 @@ Notifications.setNotificationHandler({
 
 const AddProduct = ({ navigation, route }) => {
   const [itemTitle, setTitle] = React.useState("");
+  // const [itemCount, setItemCount] = React.useState(0);
+
+  // let itemCount2 = route.params.paramKey;
+
 
   React.useEffect(() => {
     async function configurePushNotifications() {
@@ -107,6 +111,10 @@ const AddProduct = ({ navigation, route }) => {
     scheduleNotificationHandler();
     sendPushNotificationHandler();
     addToDb(itemTitle)
+    // navigation.navigate("Home",
+    // {
+    //   paramKey: itemCount
+    // })
   }
 
   async function addToDb(title) {
@@ -124,6 +132,9 @@ const AddProduct = ({ navigation, route }) => {
           placeholder={"Enter Product Name"}
         />
       </View>
+      <Pressable style={styles.button} onPress={handleAddProduct}>
+        <Text style={styles.buttonText}>Add Product</Text>
+      </Pressable>
       <Pressable style={styles.button} onPress={handleAddProduct}>
         <Text style={styles.buttonText}>Add Product</Text>
       </Pressable>

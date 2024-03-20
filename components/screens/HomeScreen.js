@@ -11,40 +11,42 @@ import {
 import { fetchItems, deleteItem } from "../../sql";
 
 const HomeScreen = ({ navigation, route }) => {
-  let text = route.params;
   const [products, setProducts] = React.useState([
-    {
-      title: "title",
-      id: 0,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
-    {
-      title: "title",
-      id: 1,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
+    // {
+    //   title: "title",
+    //   id: 0,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
+    // {
+    //   title: "title",
+    //   id: 1,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
   ]);
   const [itemCount, setItemCount] = React.useState(0);
 
   React.useEffect(() => {
     console.log("UseEffect");
+    listAllDbRecords();
     setItemCount(products.length)
-    listAllDbRecords;
   }, []);
 
   async function listAllDbRecords() {
     console.log("Get");
     let result = await fetchItems();
     setProducts(result);
-    console.log(JSON.stringify(JSON.stringify(products)));
+    setItemCount(products.length)
+    console.log(JSON.stringify("Products" + JSON.stringify(products)));
     console.log();
   }
 
   async function deleteHandler(id) {
     console.log("Delete: " + id);
     let result = await deleteItem(id);
+    // let result2 = await fetchItems();
+    // setProducts(result2);
     console.log(JSON.stringify(result));
   }
 
@@ -62,12 +64,19 @@ const HomeScreen = ({ navigation, route }) => {
           >
             <Text style={styles.buttonText}>Add a new item</Text>
           </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("UpdateProduct")}
+          >
+            <Text style={styles.buttonText}>Update </Text>
+          </Pressable>
           <View>
-            {products.map((product) => (
+            {products.map((product) => {
               <View style={styles.itemContainer}>
                 <Text style={styles.title}>
                   ID:{product.id} Title:{product.title}
                 </Text>
+                
                 <Image
                   style={styles.itemImage}
                   source={{
@@ -81,7 +90,7 @@ const HomeScreen = ({ navigation, route }) => {
                   <Text style={styles.buttonText}>Delete Item</Text>
                 </Pressable>
               </View>
-            ))}
+            })}
           </View>
         </View>
       </ScrollView>

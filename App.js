@@ -5,6 +5,7 @@ import { Text, Button } from 'react-native';
 import HomeScreen from './components/screens/HomeScreen';
 import ViewProduct from './components/screens/ViewProducts';
 import AddProduct from './components/screens/AddProduct';
+import UpdateProduct from './components/screens/UpdateProduct';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,8 @@ export default function App() {
         />
         <Stack.Screen name="ViewProducts" component={ViewProduct} />
         <Stack.Screen name="AddProduct" component={AddProduct} />
+        <Stack.Screen name="UpdateProduct" component={UpdateProduct} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

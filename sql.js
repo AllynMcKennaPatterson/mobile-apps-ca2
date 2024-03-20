@@ -62,7 +62,8 @@ export const deleteItem = (itemId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        `DELETE FROM items WHERE (id) = ${itemId}`,
+        `DELETE FROM items WHERE (id) = ?`,
+        [itemId],
         (xx, result) => { // xx is the transaction id which we don't use
           resolve(result);
         },
@@ -73,4 +74,22 @@ export const deleteItem = (itemId) => {
     });
   });
   return promise;
+}
+
+export const updateItem = (updatedItem) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `UPDATE items SET title = ? WHERE id = ?;`,
+        [updatedItem.title, updatedItem.id],
+        (tx, result) => {
+          resolve(result.rowsAffected) // Resolves with the number of rows affected by the update
+        },
+        (tx, err) => {
+          reject(err)
+        }
+      )
+    })
+  })
+  return promise
 }
