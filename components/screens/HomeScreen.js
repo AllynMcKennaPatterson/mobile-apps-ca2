@@ -13,25 +13,25 @@ import { fetchItems, deleteItem } from "../../sql";
 const HomeScreen = ({ navigation, route }) => {
   let text = route.params;
   const [products, setProducts] = React.useState([
-    {
-      title: "title",
-      id: 0,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
-    {
-      title: "title",
-      id: 1,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
+    // {
+    //   title: "title",
+    //   id: 0,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
+    // {
+    //   title: "title",
+    //   id: 1,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
   ]);
   const [itemCount, setItemCount] = React.useState(0);
 
   React.useEffect(() => {
     console.log("UseEffect");
     setItemCount(products.length)
-    listAllDbRecords;
+    listAllDbRecords();
   }, []);
 
   async function listAllDbRecords() {
