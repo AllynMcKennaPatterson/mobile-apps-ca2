@@ -21,12 +21,12 @@ export const init = () => {
   return promise;
 };
 
-export const insertItem = (newItem) => {
+export const insertItem = (title, imageUri) => {
     const promise = new Promise((resolve, reject) => {
         db.transaction(tx => {
           tx.executeSql(
-            `INSERT INTO items (title) VALUES (?);`,
-            [newItem.title],  // An array of data that can be inserted into the swl query
+            `INSERT INTO items (title, imageUri) VALUES (?, ?);`,
+            [title, imageUri],  // An array of data that can be inserted into the swl query
             (xx, result) => { // xx is the transaction id which we don't use
               resolve(result);
             },
@@ -57,20 +57,19 @@ export const fetchItems = () => {
       return promise;
 }; 
 
-export const deleteItem = (itemId) => {
-  console.log("Deleting item " + itemId + " from db")
+export const deleteItem = (id) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction(tx => {
-      tx.executeSql(
-        `DELETE FROM items WHERE (id) = ${itemId}`,
-        (xx, result) => { // xx is the transaction id which we don't use
-          resolve(result);
+      tx.executeSql(`DELETE FROM items WHERE id = ?`,
+        [id],
+        (xx,result) => {
+          resolve(result.rows._array)
         },
         (xx, err) => {
-          reject(err);
+          reject(err)
         }
-      );
-    });
-  });
-  return promise;
+      )
+    })
+  })
+  return promise
 }

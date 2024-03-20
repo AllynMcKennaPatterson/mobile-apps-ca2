@@ -13,31 +13,32 @@ import { fetchItems, deleteItem } from "../../sql";
 const HomeScreen = ({ navigation, route }) => {
   let text = route.params;
   const [products, setProducts] = React.useState([
-    {
-      title: "title",
-      id: 0,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
-    {
-      title: "title",
-      id: 1,
-      imageUri:
-        "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
-    },
+    // {
+    //   title: "title",
+    //   id: 0,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
+    // {
+    //   title: "title",
+    //   id: 1,
+    //   imageUri:
+    //     "https://cdn.britannica.com/79/232779-050-6B0411D7/German-Shepherd-dog-Alsatian.jpg",
+    // },
   ]);
   const [itemCount, setItemCount] = React.useState(0);
 
   React.useEffect(() => {
     console.log("UseEffect");
+    listAllDbRecords();
     setItemCount(products.length)
-    listAllDbRecords;
   }, []);
 
   async function listAllDbRecords() {
     console.log("Get");
     let result = await fetchItems();
     setProducts(result);
+    console.log("Result from fetch: " + result)
     console.log(JSON.stringify(JSON.stringify(products)));
     console.log();
   }
@@ -45,6 +46,8 @@ const HomeScreen = ({ navigation, route }) => {
   async function deleteHandler(id) {
     console.log("Delete: " + id);
     let result = await deleteItem(id);
+    listAllDbRecords();
+    setItemCount(products.length)
     console.log(JSON.stringify(result));
   }
 

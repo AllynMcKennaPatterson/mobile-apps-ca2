@@ -5,10 +5,15 @@ import { Text, Button } from 'react-native';
 import HomeScreen from './components/screens/HomeScreen';
 import ViewProduct from './components/screens/ViewProducts';
 import AddProduct from './components/screens/AddProduct';
+import { init } from "./sql";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  React.useEffect(() => {
+    init();
+  })
   return (
     <NavigationContainer>
       <Stack.Navigator>

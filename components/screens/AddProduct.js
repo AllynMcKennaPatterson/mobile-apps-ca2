@@ -15,6 +15,8 @@ Notifications.setNotificationHandler({
 
 const AddProduct = ({ navigation, route }) => {
   const [itemTitle, setTitle] = React.useState("");
+  const [imageUri, setImageUri] = React.useState("");
+
 
   React.useEffect(() => {
     async function configurePushNotifications() {
@@ -106,11 +108,11 @@ const AddProduct = ({ navigation, route }) => {
     console.log(JSON.stringify(itemTitle))
     scheduleNotificationHandler();
     sendPushNotificationHandler();
-    addToDb(itemTitle)
+    addToDb(itemTitle, imageUri)
   }
 
-  async function addToDb(title) {
-    let result = await insertItem({ title: title });
+  async function addToDb(title, imageUri) {
+    let result = await insertItem({ title: title, imageUri: imageUri });
     console.log(JSON.stringify(result));
   }
 
@@ -121,6 +123,14 @@ const AddProduct = ({ navigation, route }) => {
         <TextInput style={styles.textBox}
           keyboardType={"default"}
           onChangeText={(text) => setTitle(text)}
+          placeholder={"Enter Product Name"}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputText}>Image URI:</Text>
+        <TextInput style={styles.textBox}
+          keyboardType={"default"}
+          onChangeText={(uri) => setImageUri(uri)}
           placeholder={"Enter Product Name"}
         />
       </View>
